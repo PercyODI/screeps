@@ -1,0 +1,59 @@
+/*
+ * Module code goes here. Use 'module.exports' to export things:
+ * module.exports = 'a thing';
+ *
+ * You can import it from another modules like this:
+ * var mod = require('buildCreep'); // -> 'a thing'
+ */
+ 
+ // http://codepen.io/findoff/full/RPmqOd/
+ 
+ module.exports = function(role) {
+    var harvesterParts = [MOVE, MOVE, CARRY, WORK];         // 250 Energy
+    var builderParts = [WORK, WORK, CARRY, MOVE];           // 300 Energy
+    var guardParts = [TOUGH, TOUGH, MOVE, MOVE, ATTACK];    // 200 Energy
+    var advGuardParts = [TOUGH, TOUGH, TOUGH, MOVE, MOVE, ATTACK, ATTACK]   // 290 Energy
+    var healerParts = [MOVE, HEAL];                         // 300 Energy
+    var rangerParts = [TOUGH, MOVE, MOVE, RANGED_ATTACK];   // 260 Energy
+    
+    var spawn = Game.spawns.Spawn1;
+    
+    switch(role) {
+        case "harvester":
+            if(spawn.canCreateCreep(harvesterParts) == OK) {
+                spawn.createCreep(harvesterParts, null, {role: 'harvester', homeSpawn: spawn});
+                console.log(spawn.name + " is spawning a harvester");
+            }
+            break;
+        case "builder":
+            if(spawn.canCreateCreep(builderParts) == OK) {
+                spawn.createCreep(builderParts, null, {role: 'builder', homeSpawn: spawn});
+                console.log(spawn.name + " is spawning a builder");
+            }
+            break;
+        case 'guard':
+            if(spawn.canCreateCreep(guardParts) == OK) {
+                spawn.createCreep(guardParts, null, {role: 'guard', homeSpawn: spawn});
+                console.log(spawn.name + " is spawning a guard");
+            }
+            break;
+        case 'healer':
+            if(spawn.canCreateCreep(healerParts) == OK) {
+                spawn.createCreep(healerParts, null, {role: 'healer', homeSpawn: spawn});
+                console.log(spawn.name + " is spawning a healer");
+            }
+            break;
+        case 'ranger':
+            if(spawn.canCreateCreep(rangerParts) == OK) {
+                spawn.createCreep(rangerParts, null, {role: 'ranger', homeSpawn: spawn});
+                console.log(spawn.name + " is spawning a ranger");
+            }
+        case 'advanced guard':
+            if(spawn.canCreateCreep(advGuardParts) == OK) {
+                spawn.createCreep(advGuardParts, null, {role: 'advanced guard', homeSpawn: spawn});
+                console.log(spawn.name + " is spawning an advanced guard");
+            }
+    }
+    
+    
+}

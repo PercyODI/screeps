@@ -1,0 +1,37 @@
+/*
+ * Module code goes here. Use 'module.exports' to export things:
+ * module.exports = 'a thing';
+ *
+ * You can import it from another modules like this:
+ * var mod = require('healer'); // -> 'a thing'
+ */
+ var _ = require('lodash');
+ module.exports = function(creep) {
+    var spawn = Game.spawns.Spawn1;
+     
+    if(creep.hits < creep.hitsMax / 2) {
+        creep.heal(creep);
+        creep.moveTo(spawn);
+        console.log(creep.name + " Healing Self");
+    } else {
+        var guardsToHeal = _.filter(Game.creeps, function(n) {
+            return ((n.memory.role == 'guard' || n.memory.role == 'ranger') && n.hits < n.hitsMax);
+        });
+        if(guardsToHeal == "") {
+            var guardToFollow = creep.pos.findClosestByRange(_.filter(Game.creeps, {memory: {role: "guard"}}));
+            if(guardToFollow != null) {
+                creep.moveTo(guardToFollow);
+                // console.log("No Guards to Heal. " + creep.name + " following " + guardToFollow.name);
+            } else {
+                // console.log("No Guards In Room");
+            }
+        } else {
+            guardsToHeal = _.sortBy(guardsToHeal, function(n) {
+                return creep.pos.getRangeTo(n.pos);
+            })
+            console.log("Healing " + guardsToHeal[0]);
+            creep.moveTo(guardsToHeal[0]);
+            creep.heal(guardsToHeal[0]);
+        }
+    }
+ }

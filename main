@@ -1,0 +1,75 @@
+var harvester = require("harvester");
+var builder = require("builder");
+var guard = require("guard");
+var healer = require("healer");
+var ranger = require("ranger");
+var buildCreep = require("buildCreep");
+
+
+module.exports.loop = function () {
+    var unitCounts = {
+        harvesters: 0,
+        builders: 0,
+        guards: 0,
+        advGuards: 0,
+        healers: 0,
+        rangers: 0
+    };
+	for(var name in Game.creeps) {
+		var creep = Game.creeps[name];
+		if(creep.memory.role == "harvester") {
+		    unitCounts.harvesters++;
+		    harvester(creep);
+		} 
+		else if(creep.memory.role == "builder") {
+		    unitCounts.builders++;
+		    builder(creep);
+		}
+		else if(creep.memory.role == "guard") {
+		    unitCounts.guards++;
+		    guard(creep);
+		}
+		else if(creep.memory.role == "healer") {
+		    unitCounts.healers++;
+		    healer(creep);
+		}
+		else if(creep.memory.role == "ranger") {
+		    unitCounts.rangers++;
+		    ranger(creep);
+		}
+		else if(creep.memory.role == "advanced guard") {
+		    unitCounts.advGuards++;
+		    guard(creep); // Change to a specific function later
+		}
+	}
+	
+	if(unitCounts.harvesters < 2) {
+	    buildCreep("harvester");
+	} 
+	else if(unitCounts.guards < 1) {
+	    buildCreep("guard");
+	}
+	else if(unitCounts.healers < 1) {
+	    buildCreep("healer");
+	}
+	else if (unitCounts.rangers < 1) {
+	    buildCreep("ranger");
+	}
+	else if(unitCounts.builders < 1) {
+	    buildCreep("builder");
+	}
+	else if(unitCounts.advGuards < 1) {
+	    buildCreep("advanced guard");
+	}
+	
+	//Logs
+// 	console.log("\n\nTime is " + Game.time + "\n");
+    if(Game.time % 5 == 0) {
+	    console.log("Harvester Count: " + unitCounts.harvesters + 
+	    "    Guard Count: " + unitCounts.guards + 
+	    "    Builder Count: " + unitCounts.builders +
+	    "    Healer Count: " + unitCounts.healers +
+	    "    Ranger Count: " + unitCounts.rangers +
+	    "    AdvGuard Count: " + unitCounts.advGuards);
+    }
+};

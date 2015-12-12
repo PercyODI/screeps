@@ -1,0 +1,27 @@
+/*
+ * Module code goes here. Use 'module.exports' to export things:
+ * module.exports = 'a thing';
+ *
+ * You can import it from another modules like this:
+ * var mod = require('ranger'); // -> 'a thing'
+ */
+ 
+ module.exports = function(creep) {
+    var spawn = Game.spawns.Spawn1
+    var hostile = spawn.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+    if(hostile != null && hostile.pos.inRangeTo(spawn.pos, 15)) {
+        var rangedAttackCode = creep.rangedAttack(hostile);
+        if(rangedAttackCode == ERR_NOT_IN_RANGE) {
+            creep.moveTo(hostile);
+        } else {
+            if(hostile.pos.inRangeTo(creep.pos, 2)) {
+                creep.move(hostile.pos.getDirectionTo(creep));
+            }
+        }
+    } else {
+        if(!creep.pos.inRangeTo(spawn.pos, 2)) {
+            // console.log("Going back to spawn");
+            creep.moveTo(spawn);
+        }
+    }
+ }

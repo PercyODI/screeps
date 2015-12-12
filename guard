@@ -1,0 +1,25 @@
+/*
+ * Module code goes here. Use 'module.exports' to export things:
+ * module.exports = 'a thing';
+ *
+ * You can import it from another modules like this:
+ * var mod = require('guard'); // -> 'a thing'
+ */
+ 
+ module.exports = function(creep) {
+    var spawn = Game.spawns.Spawn1
+    var hostile = spawn.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+    if(hostile != null && hostile.pos.inRangeTo(spawn.pos, 15)) {
+        // console.log("attacking");
+        if(creep.attack(hostile) == ERR_NOT_IN_RANGE) {
+            // console.log("moving closer");
+            creep.moveTo(hostile);
+            creep.attack(hostile);
+        }
+    } else {
+        if(!creep.pos.inRangeTo(spawn.pos, 2)) {
+            // console.log("Going back to spawn");
+            creep.moveTo(spawn);
+        }
+    }
+ }
